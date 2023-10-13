@@ -26,7 +26,7 @@ public abstract class ScannerUtil
         return sdf;
     }
 
-    public static final int scanIntInRange(String msg, int min, int max)
+    public static final int scanIntInRange(String msg, Integer min, Integer max)
     {
         return scanIntInRange(msg, min, max, false);
     }
@@ -34,7 +34,7 @@ public abstract class ScannerUtil
     /**
      * Pede uma op��o ao usu�rio at� que o valor inserido seja v�lido (1 a 3)
      */
-    public static final Integer scanIntInRange(String msg, int min, int max, boolean canBeEmpty)
+    public static final Integer scanIntInRange(String msg, Integer min, Integer max, boolean canBeEmpty)
     {
         while(true)
         {
@@ -48,7 +48,8 @@ public abstract class ScannerUtil
                     return null;
                 
                 int opcaoInt = Integer.parseInt(opcao);
-                if(opcaoInt >= min && opcaoInt <= max)
+                if((min == null || opcaoInt >= min)
+                && (max == null || opcaoInt <= max))
                     return opcaoInt;
             }
             catch(NumberFormatException ex) {}
@@ -83,6 +84,27 @@ public abstract class ScannerUtil
 
                 System.out.println("Campo não pode estar vazio");
             }
+    }
+    
+    public static final String scanString(String msg, Integer min, Integer max)
+    {
+        while(true)
+        {
+            if(msg != null)
+                System.out.println(msg);
+            
+            String input = scan.nextLine().trim();
+            
+            if((min == null || input.length() >= min)
+            && (max == null || input.length() <= max))
+                return input;
+            
+            System.out.println(
+                "Campo inválido. Tamanho" +
+                (min != null ? (" mínimo: " + min + ".") : "") +
+                (max != null ? (" máximo: " + max + ".") : "")
+            );
+        }
     }
     
     public static final Date scanDate(String msg) {

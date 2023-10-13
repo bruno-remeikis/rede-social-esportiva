@@ -4,5 +4,6 @@ com\faesa\app\dao\EventoDAO.class
 com\faesa\app\dao\EventoDAOOracle.class
 com\faesa\app\controller\EventoController.class
 com\faesa\app\principal\App.class
+com\faesa\app\dao\DAO.class
 com\faesa\app\util\ScannerUtil.class
 com\faesa\app\model\Evento.class

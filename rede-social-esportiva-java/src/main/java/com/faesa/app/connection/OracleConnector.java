@@ -11,15 +11,16 @@ public class OracleConnector
         PASSWORD = "oracle",
         HOST = "localhost",
         PORT = "1521",
-        DB_NAME = "ADMIN",
+        SID = "XE",
         //URL = "jdbc:oracle:thin:" + USER + '/' + PASSWORD + '@' + HOST + ':' + PORT + ':' + DB_NAME;
-        URL = "jdbc:oracle:thin@" + HOST + ':' + PORT + ':' + DB_NAME;
+        URL = "jdbc:oracle:thin:@" + HOST + ':' + PORT + ':' + SID;
     
     private static Connection connection = null;
     
     static {
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
+            //Class.forName("oracle.jdbc.driver.OracleDriver");
+            Class.forName("oracle.jdbc.OracleDriver");
         }
         catch(ClassNotFoundException e) {
             e.printStackTrace();

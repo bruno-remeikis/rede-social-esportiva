@@ -1,6 +1,7 @@
 package com.faesa.app.principal;
 
 import com.faesa.app.controller.EventoController;
+import com.faesa.app.model.Evento;
 import com.faesa.app.util.ScannerUtil;
 import com.faesa.app.util.StringUtil;
 import java.util.Scanner;
@@ -20,6 +21,7 @@ public class App
         while(running)
         {
             System.out.println(
+                '\n' +
                 "+------------------------+\n" +
                 "|     MENÚ PRINCIPAL     |\n" +
                 "+------------------------+\n" +
@@ -39,6 +41,7 @@ public class App
                     inserirRegistros();
                     break;
                 case 3:
+                    removerRegistros();
                     break;
                 case 4:
                     break;
@@ -68,7 +71,7 @@ public class App
             "|  DISCIPLINA: Banco de Dados     |\n" +
             "|              2023/2             |\n" +
             "|  PROFESSOR: Howard Roatti       |\n" +
-            "+---------------------------------+\n"
+            "+---------------------------------+"
         );
     }
     
@@ -84,11 +87,37 @@ public class App
     
     private static void inserirRegistros()
     {
-        String nome = ScannerUtil.scanString("Nome do Evento: ");
-        Date dt = ScannerUtil.scanDate("Data do Evento: ");
-        String local = ScannerUtil.scanString("Local: ");
-        String desc = ScannerUtil.scanString("Descrição: ");
+        System.out.println(
+            '\n' +
+            "+-------------------+\n" +
+            "| Criar novo Evento |\n" +
+            "+-------------------+"
+        );
         
+        String nome = ScannerUtil.scanString("- Nome do Evento: ");
+        Date dt = ScannerUtil.scanDate("- Data do Evento (dd/MM/yyyy): ");
+        String local = ScannerUtil.scanString("- Local: ");
+        String desc = ScannerUtil.scanString("- Descrição: ");
+
+        Evento e = new Evento(null, nome, desc, dt, local);
+        if(EventoController.insert(e))
+            System.out.println("\nEvento criado com sucesso!");
+    }
+    
+    private static void removerRegistros()
+    {
+        System.out.println(
+            '\n' +
+            "+--------------------+\n" +
+            "|   Remover Evento   |\n" +
+            "+--------------------+"
+        );
         
+        int id = ScannerUtil.scanIntInRange("- ID do Evento: ", 1, null);
+        
+        if(EventoController.delete(id))
+            System.out.println("Evento removido com sucesso.");
+        else
+            System.out.println("Não existe nenhum evento com este ID.");
     }
 }

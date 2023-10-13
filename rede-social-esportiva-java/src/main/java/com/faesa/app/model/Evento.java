@@ -1,11 +1,15 @@
 package com.faesa.app.model;
 
 import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-//import org.projectlombok.lombok.Getter;
-
-//@Getter
-//@Setter
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Evento
 {
     private Integer id;
