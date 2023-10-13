@@ -107,6 +107,33 @@ public abstract class ScannerUtil
         }
     }
     
+    public static final String scanString(String msg, boolean canBeEmpty, boolean ignoreCase, String... options)
+    {
+        while(true)
+        {
+            if(msg != null)
+                System.out.println(msg);
+            
+            String input = scan.nextLine().trim();
+            
+            if(!input.isEmpty())
+                return input;
+            
+            if(ignoreCase) {
+                for(String opt: options)
+                    if(input.equalsIgnoreCase(opt))
+                        return input;
+            }
+            else {
+                for(String opt: options)
+                    if(input.equals(opt))
+                        return input;
+            }
+            
+            System.out.println("Opção inválida.");
+        }
+    }
+    
     public static final Date scanDate(String msg) {
         return scanDate(msg, false, null);
     }

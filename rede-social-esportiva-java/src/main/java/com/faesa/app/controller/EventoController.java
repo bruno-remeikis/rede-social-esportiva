@@ -2,6 +2,7 @@ package com.faesa.app.controller;
 
 import com.faesa.app.dao.EventoDAOOracle;
 import com.faesa.app.model.Evento;
+import java.util.List;
 
 public class EventoController
 {
@@ -17,6 +18,17 @@ public class EventoController
         }
         catch(Exception e) {
             System.out.println("Erro ao tentar buscar evento por ID: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    public static List<Evento> findAll()
+    {
+        try {
+            return new EventoDAOOracle().selectAll();
+        }
+        catch(Exception e) {
+            System.out.println("Erro ao tentar buscar eventos." + e.getMessage());
             return null;
         }
     }

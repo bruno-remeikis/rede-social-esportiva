@@ -6,6 +6,7 @@ import com.faesa.app.util.ScannerUtil;
 import com.faesa.app.util.StringUtil;
 import java.util.Scanner;
 import java.util.Date;
+import java.util.List;
 
 public class App
 {
@@ -82,9 +83,18 @@ public class App
             (qtdRegistros >= 0
                 ? (qtdRegistros + "")
                 : "erro"
-            ),
-            4
-        ) + "           |\n";
+            ), 4
+        ) +
+        StringUtil.repeat(' ', 11) +
+        "|\n";
+    }
+    
+    private static boolean deveContinuar()
+    {
+        return ScannerUtil.scanString(
+            "Deseja inserir um novo registro? (s/N): ",
+            true, true, "S", "N"
+        ).equalsIgnoreCase("S");
     }
     
     private static void relatorios()
@@ -94,83 +104,119 @@ public class App
     
     private static void inserirRegistros()
     {
-        System.out.println(
-            '\n' +
-            "+-------------------+\n" +
-            "| Criar novo Evento |\n" +
-            "+-------------------+"
-        );
-        
-        String nome = ScannerUtil.scanString("- Nome do Evento: ");
-        Date dt = ScannerUtil.scanDate("- Data do Evento (dd/MM/yyyy): ");
-        String local = ScannerUtil.scanString("- Local: ");
-        String desc = ScannerUtil.scanString("- Descrição: ");
+        do {
+            System.out.println(
+                '\n' +
+                "+-------------------+\n" +
+                "| Criar novo Evento |\n" +
+                "+-------------------+"
+            );
 
-        Evento e = new Evento(null, nome, desc, dt, local, null);
-        if(EventoController.save(e))
-            System.out.println("\nEvento criado com sucesso!");
+            String nome = ScannerUtil.scanString("- Nome do Evento: ");
+            Date dt = ScannerUtil.scanDate("- Data do Evento (dd/MM/yyyy): ");
+            String local = ScannerUtil.scanString("- Local: ");
+            String desc = ScannerUtil.scanString("- Descrição: ");
+
+            Evento e = new Evento(null, nome, desc, dt, local, null);
+            if(EventoController.save(e))
+                System.out.println("\nEvento criado com sucesso!");
+        }
+        while(deveContinuar());
     }
     
     private static void removerRegistros()
     {
-        System.out.println(
-            '\n' +
-            "+--------------------+\n" +
-            "|   Remover Evento   |\n" +
-            "+--------------------+"
-        );
-        
-        int id = ScannerUtil.scanIntInRange("- ID do Evento: ", 1, null);
-        
-        if(EventoController.delete(id))
-            System.out.println("Evento removido com sucesso.");
-        else
-            System.out.println("Não existe nenhum evento com este ID.");
+        do {
+            System.out.println(
+                '\n' +
+                "+--------------------+\n" +
+                "|   Remover Evento   |\n" +
+                "+--------------------+"
+            );
+
+            System.out.println("\nEventos:");
+            List<Evento> eventos = EventoController.findAll();
+            for(Evento e: eventos)
+                System.out.println(e.getId() + " - " + e.getNome());
+
+            System.out.println("(Deixe em branco caso queira desistir de remover)");
+            Integer id = ScannerUtil.scanIntInRange("\n- ID do Evento a ser removido: ", 1, null, true);
+            
+            if(id == null)
+                return;
+
+            Evento evento = null;
+            for(Evento e: eventos)
+                if(e.getId() == id) {
+                    evento = e;
+                    break;
+                }
+
+            if(ScannerUtil.scanString(
+                "Deseja mesmo excluir \"" + evento.getNome() + "\"? (s/N): ",
+                false, true, "S", "N"
+            ).equalsIgnoreCase("S"))
+            {
+                if(EventoController.delete(id))
+                    System.out.println("Evento removido com sucesso.");
+                else
+                    System.out.println("Não existe nenhum evento com este ID.");
+            }
+        }
+        while(deveContinuar());
     }
     
     private static void atualizarRegistros()
     {
-        System.out.println(
-            '\n' +
-            "+--------------------+\n" +
-            "|  Atualizar Evento  |\n" +
-            "+--------------------+"
-        );
-        
-        int id = ScannerUtil.scanIntInRange("- ID do Evento: ", 1, null);
-        
-        Evento e = EventoController.selectById(id);
-        
-        if(e == null) {
-            System.out.println("Não foi encontrado nenhum evento com este ID.");
-            return;
-        }
-        
-        String nome = ScannerUtil.scanString(
-            "- Nome do Evento (" + e.getNome() + ")\n: ", true
-        );
-        if(nome != null)
-            e.setNome(nome);
-        
-        Date dt = ScannerUtil.scanDate(
-            "- Data do Evento (" + ScannerUtil.formatDate(e.getData()) + ")\n: ", true
-        );
-        if(dt != null)
-            e.setData(dt);
-        
-        String local = ScannerUtil.scanString(
-            "- Local (" + e.getLocal() + ")\n: ", true
-        );
-        if(local != null)
-            e.setLocal(local);
-        
-        String desc = ScannerUtil.scanString(
-            "- Descrição: (" + e.getDescricao() + ")\n: ", true
-        );
-        if(desc != null)
-            e.setDescricao(desc);
+        do {
+            System.out.println(
+                '\n' +
+                "+--------------------+\n" +
+                "|  Atualizar Evento  |\n" +
+                "+--------------------+"
+            );
 
-        if(EventoController.save(e))
-            System.out.println("\nEvento atualizado com sucesso!");
+            int id = ScannerUtil.scanIntInRange("- ID do Evento: ", 1, null);
+
+            Evento e = EventoController.selectById(id);
+
+            if(e == null) {
+                System.out.println("Não foi encontrado nenhum evento com este ID.");
+                return;
+            }
+
+            System.out.println("(Deixe o campo branco caso queira manter o mesmo valor)");
+
+            String nome = ScannerUtil.scanString(
+                "- Nome do Evento (" + e.getNome() + ")\n: ", true
+            );
+            if(nome != null)
+                e.setNome(nome);
+
+            Date dt = ScannerUtil.scanDate(
+                "- Data do Evento (" + ScannerUtil.formatDate(e.getData()) + ")\n: ", true
+            );
+            if(dt != null)
+                e.setData(dt);
+
+            String local = ScannerUtil.scanString(
+                "- Local (" + e.getLocal() + ")\n: ", true
+            );
+            if(local != null)
+                e.setLocal(local);
+
+            String desc = ScannerUtil.scanString(
+                "- Descrição: (" + e.getDescricao() + ")\n: ", true
+            );
+            if(desc != null)
+                e.setDescricao(desc);
+
+            if(EventoController.save(e))
+            {
+                System.out.println("\nEvento atualizado com sucesso!");
+                System.out.println("");
+            }
+        }
+        while(deveContinuar());
     }
 }
