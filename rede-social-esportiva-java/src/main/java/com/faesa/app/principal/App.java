@@ -1,36 +1,20 @@
 package com.faesa.app.principal;
 
-import util.ScannerUtil;
-import util.StringUtil;
+import com.faesa.app.controller.EventoController;
+import com.faesa.app.util.ScannerUtil;
+import com.faesa.app.util.StringUtil;
+import java.util.Scanner;
+import java.util.Date;
 
 public class App
 {
+    private static final Scanner scan = new Scanner(System.in);
+    
     public static void main(String[] args)
     {
-        int qtdEsportes = 0;
-        int qtdEventos = 0;
+        ScannerUtil.init(scan);
         
-        System.out.println(
-            "+---------------------------------+\n" +
-            "|      REDE SOCIAL ESPORTIVA      |\n" +
-            "|                                 |\n" +
-            "|  TOTAL DE REGISTROS EXISTENTES  |\n" +
-            "|    1 - ESPORTES: " +
-            StringUtil.fillLeft(qtdEsportes + "", 4) + "           |\n" +
-            "|    2 - EVENTOS:  " +
-            StringUtil.fillLeft(qtdEventos + "", 4) + "           |\n" +
-            "|                                 |\n" +
-            "|  CRIADO POR:                    |\n" +
-            "|    - Bruno Coutinho Remeikis    |\n" +
-            "|    - Isabelly Lopes dos Santos  |\n" +
-            "|    - João Henrique Schultz      |\n" +
-            "|    - Nicolas Lima               |\n" +
-            "|    - Pedro Cassemiro            |\n" + 
-            "|  DISCIPLINA: Banco de Dados     |\n" +
-            "|              2023/2             |\n" +
-            "|  PROFESSOR: Howard Roatti       |\n" +
-            "+---------------------------------+\n"
-        );
+        exibirSplashScreen();
         
         boolean running = true;
         while(running)
@@ -64,8 +48,47 @@ public class App
         }
     }
     
+    private static void exibirSplashScreen()
+    {        
+        
+        System.out.println(
+            "+---------------------------------+\n" +
+            "|      REDE SOCIAL ESPORTIVA      |\n" +
+            "|                                 |\n" +
+            "|  TOTAL DE REGISTROS EXISTENTES  |\n" +
+            "|    1 - ESPORTES: " + getQtdRegStr(0) +
+            "|    2 - EVENTOS:  " + getQtdRegStr(EventoController.getTotalRegistros()) +
+            "|                                 |\n" +
+            "|  CRIADO POR:                    |\n" +
+            "|    - Bruno Coutinho Remeikis    |\n" +
+            "|    - Isabelly Lopes dos Santos  |\n" +
+            "|    - João Henrique Schultz      |\n" +
+            "|    - Nicolas Lima               |\n" +
+            "|    - Pedro Cassemiro            |\n" + 
+            "|  DISCIPLINA: Banco de Dados     |\n" +
+            "|              2023/2             |\n" +
+            "|  PROFESSOR: Howard Roatti       |\n" +
+            "+---------------------------------+\n"
+        );
+    }
+    
+    private static String getQtdRegStr(int qtdRegistros) {
+        return StringUtil.fillLeft(
+            (qtdRegistros >= 0
+                ? (qtdRegistros + "")
+                : "erro"
+            ),
+            4
+        ) + "           |\n";
+    }
+    
     private static void inserirRegistros()
     {
+        String nome = ScannerUtil.scanString("Nome do Evento: ");
+        Date dt = ScannerUtil.scanDate("Data do Evento: ");
+        String local = ScannerUtil.scanString("Local: ");
+        String desc = ScannerUtil.scanString("Descrição: ");
+        
         
     }
 }

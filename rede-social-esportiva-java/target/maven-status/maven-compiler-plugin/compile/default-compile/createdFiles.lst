@@ -1,3 +1,8 @@
-util\ScannerUtil.class
-util\StringUtil.class
+com\faesa\app\connection\OracleConnector.class
+com\faesa\app\util\StringUtil.class
+com\faesa\app\dao\EventoDAO.class
+com\faesa\app\dao\EventoDAOOracle.class
+com\faesa\app\controller\EventoController.class
 com\faesa\app\principal\App.class
+com\faesa\app\util\ScannerUtil.class
+com\faesa\app\model\Evento.class

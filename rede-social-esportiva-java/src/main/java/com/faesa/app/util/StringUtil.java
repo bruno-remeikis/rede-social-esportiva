@@ -1,4 +1,4 @@
-package util;
+package com.faesa.app.util;
 
 public class StringUtil
 {
