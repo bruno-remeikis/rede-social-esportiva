@@ -17,4 +17,5 @@ public class Evento
     private String descricao;
     private Date data;
     private String local;
+    private Date dtInsert;
 }
