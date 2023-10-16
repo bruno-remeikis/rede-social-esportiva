@@ -83,7 +83,7 @@ Os principais diretórios do repositório estão dispostos da seguinte forma:
 
          - &#60;Entidade&#62;DAO: Interfaces que contém os cabeçalhos dos métodos das classes DAO não abstratas. <b>Exemplo:</b> [EsporteDAO.java](rede-social-esportiva-java/src/main/java/com/faesa/app/dao/EsporteDAO.java).
 
-         - &#60;Entidade&#62;DAOOracle: Classes que extendem de [DAO](rede-social-esportiva-java/src/main/java/com/faesa/app/dao.DAO.java) e implementam &#60;Entidade&#62;DAO, definindo o corpo dos métodos de sua interface. Estas são as que, de fato, possuem os códigos SQL da aplicação, bem como o tratamento de entrada e saída de dados do banco de dados. <b>Exemplo:</b> [EsporteDAOOracle.java](rede-social-esportiva-java/src/main/java/com/faesa/app/dao/EsporteDAOOracle.java).
+         - &#60;Entidade&#62;DAOOracle: Classes que extendem de [DAO](rede-social-esportiva-java/src/main/java/com/faesa/app/dao/DAO.java) e implementam &#60;Entidade&#62;DAO, definindo o corpo dos métodos de sua interface. Estas são as que, de fato, possuem os códigos SQL da aplicação, bem como o tratamento de entrada e saída de dados do banco de dados. <b>Exemplo:</b> [EsporteDAOOracle.java](rede-social-esportiva-java/src/main/java/com/faesa/app/dao/EsporteDAOOracle.java).
 
       - [model](rede-social-esportiva-java/src/main/java/com/faesa/app/model): Nesse diretório encontram-ser as classes das entidades descritas nos [diagramas](diagrams).
 
