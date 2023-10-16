@@ -2,29 +2,21 @@ package com.faesa.app.dao;
 
 import com.faesa.app.connection.OracleConnector;
 import com.faesa.app.model.Esporte;
-import com.faesa.app.model.Evento;
-
+import com.faesa.app.model.dto.EventosEsporteDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventoDAOOracle extends DAO implements EventoDAO
+public class EsporteDAOOracle extends DAO implements EsporteDAO
 {
-    private static Evento fillObject(ResultSet rs) throws Exception
+    private static Esporte fillObject(ResultSet rs) throws Exception
     {
-        Evento e = new Evento();
+        Esporte e = new Esporte();
         e.setId(rs.getInt("ID"));
         e.setNome(rs.getString("NOME"));
-        e.setDescricao(rs.getString("DESCRICAO"));
-        e.setData(rs.getDate("DT_EVENTO"));
-        e.setLocal(rs.getString("LOCAL"));
         e.setDtInsert(rs.getDate("DT_INSERT"));
-        
-        Esporte esporte = new Esporte();
-        esporte.setNome(rs.getString("NOME_ESPORTE"));
-        e.setEsporte(esporte);
         return e;
     }
     
@@ -32,7 +24,7 @@ public class EventoDAOOracle extends DAO implements EventoDAO
     public int getTotalRegistros()
     {
         String query =
-            "SELECT COUNT(*) QTD_REGISTROS FROM EVENTO";
+            "SELECT COUNT(*) QTD_REGISTROS FROM ESPORTE";
 
         try(
             Connection con = OracleConnector.getConnection();
@@ -43,27 +35,18 @@ public class EventoDAOOracle extends DAO implements EventoDAO
                 return rs.getInt("QTD_REGISTROS");
         }
         catch(Exception e) {
-            System.out.println("Erro ao tentar consultar total de eventos registrados: " + e.getMessage());
+            System.out.println("Erro ao tentar consultar total de esportes registrados: " + e.getMessage());
         }
         
         return -1;
     }
-    
+
     @Override
-    public Evento selectById(int id) throws Exception
+    public Esporte selectById(int id) throws Exception
     {
         String query =
-            "SELECT " +
-            "    EVENTO.ID " +
-            "   ,EVENTO.NOME " +
-            "   ,EVENTO.DESCRICAO " +
-            "   ,EVENTO.DT_EVENTO " +
-            "   ,EVENTO.LOCAL " +
-            "   ,EVENTO.DT_INSERT " +
-            "   ,ESPORTE.NOME AS NOME_ESPORTE " +
-            "FROM EVENTO " +
-            "INNER JOIN ESPORTE ON " +
-            "   ESPORTE.ID = EVENTO.ID_ESPORTE " +
+            "SELECT ID, NOME, DT_INSERT " +
+            "FROM ESPORTE " +
             "WHERE ID = ?";
         
         try(
@@ -82,67 +65,104 @@ public class EventoDAOOracle extends DAO implements EventoDAO
     }
     
     @Override
-    public List<Evento> selectAll() throws Exception
+    public Esporte selectByNome(String nome) throws Exception
     {
         String query =
-            "SELECT " +
-            "    EVENTO.ID " +
-            "   ,EVENTO.NOME " +
-            "   ,EVENTO.DESCRICAO " +
-            "   ,EVENTO.DT_EVENTO " +
-            "   ,EVENTO.LOCAL " +
-            "   ,EVENTO.DT_INSERT " +
-            "   ,ESPORTE.NOME AS NOME_ESPORTE " +
-            "FROM EVENTO " +
-            "INNER JOIN ESPORTE ON " +
-            "   ESPORTE.ID = EVENTO.ID_ESPORTE";
+            "SELECT ID, NOME, DT_INSERT " +
+            "FROM ESPORTE " +
+            "WHERE UPPER(NOME) = ?";
+        
+        try(
+            Connection con = OracleConnector.getConnection();
+            PreparedStatement ps = con.prepareStatement(query);
+        ){
+            ps.setString(1, nome.toUpperCase());
+            
+            try(ResultSet rs = ps.executeQuery())
+            {
+                if(rs.next())
+                    return fillObject(rs);
+                return null;
+            }
+        }
+    }
+
+    @Override
+    public List<Esporte> selectAll() throws Exception
+    {
+        String query =
+            "SELECT ID, NOME, DT_INSERT " +
+            "FROM ESPORTE";
         
         try(
             Connection con = OracleConnector.getConnection();
             PreparedStatement ps = con.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
         ){
-            List<Evento> eventos = new ArrayList();
+            List<Esporte> esportes = new ArrayList();
 
             while(rs.next())
-                eventos.add(fillObject(rs));
+                esportes.add(fillObject(rs));
 
-            return eventos;
+            return esportes;
+        }
+    }
+    
+    @Override
+    public List<EventosEsporteDTO> selectQtdEventosEsporte() throws Exception
+    {
+        String query =
+            "SELECT " +
+            "    ESPORTE.ID AS ID_ESPORTE " +
+            "   ,ESPORTE.NOME AS NOME_ESPORTE " +
+            "   ,(SELECT COUNT(*) FROM EVENTO WHERE EVENTO.ID_ESPORTE = ESPORTE.ID) AS QTD_EVENTOS " +
+            "FROM ESPORTE";
+        
+        try(
+            Connection con = OracleConnector.getConnection();
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+        ){
+            List<EventosEsporteDTO> eventosEsportes = new ArrayList();
+
+            while(rs.next())
+            {
+                EventosEsporteDTO ee = new EventosEsporteDTO();
+                ee.setIdEsporte(rs.getInt("ID_ESPORTE"));
+                ee.setNomeEsporte(rs.getString("NOME_ESPORTE"));
+                ee.setQtdEventos(rs.getInt("QTD_EVENTOS"));
+                eventosEsportes.add(ee);
+            }
+
+            return eventosEsportes;
         }
     }
 
     @Override
-    public boolean insert(Evento e) throws Exception
+    public boolean insert(Esporte e) throws Exception
     {
         String query =
-            "INSERT INTO EVENTO(ID, ID_ESPORTE, NOME, DESCRICAO, DT_EVENTO, LOCAL) " +
-            "VALUES(ID_EVENTO_SEQ.NEXTVAL, ?, ?, ?, ?, ?)";
+            "INSERT INTO ESPORTE(ID, NOME) " +
+            "VALUES(ID_EVENTO_SEQ.NEXTVAL, ?)";
         
         try(
             Connection con = OracleConnector.getConnection();
             PreparedStatement ps = con.prepareStatement(query);
         ){
             int i = 1;
-            ps.setInt(i++, e.getIdEsporte());
             ps.setString(i++, e.getNome());
-            ps.setString(i++, e.getDescricao());
-            setDate(ps, i++, e.getData());
-            ps.setString(i++, e.getLocal());
             
             ps.execute();
             return true;
         }
     }
-    
+
     @Override
-    public boolean update(Evento e) throws Exception
+    public boolean update(Esporte e) throws Exception
     {
         String query =
-            "UPDATE EVENTO SET " +
-            "   NOME = ?, " +
-            "   DESCRICAO = ?, " +
-            "   DT_EVENTO = ?, " +
-            "   LOCAL = ? " +
+            "UPDATE ESPORTE SET " +
+            "   NOME = ? " +
             "WHERE ID = ?";
         
         try(
@@ -151,9 +171,6 @@ public class EventoDAOOracle extends DAO implements EventoDAO
         ){
             int i = 1;
             ps.setString(i++, e.getNome());
-            ps.setString(i++, e.getDescricao());
-            setDate(ps, i++, e.getData());
-            ps.setString(i++, e.getLocal());
             ps.setInt(i++, e.getId());
             
             return ps.executeUpdate() == 1;
@@ -164,7 +181,7 @@ public class EventoDAOOracle extends DAO implements EventoDAO
     public boolean delete(int id) throws Exception
     {
         String query =
-            "DELETE FROM EVENTO WHERE ID = ?";
+            "DELETE FROM ESPORTE WHERE ID = ?";
         
         try(
             Connection con = OracleConnector.getConnection();

@@ -91,7 +91,7 @@ public abstract class ScannerUtil
         while(true)
         {
             if(msg != null)
-                System.out.println(msg);
+                System.out.print(msg);
             
             String input = scan.nextLine().trim();
             
@@ -112,11 +112,11 @@ public abstract class ScannerUtil
         while(true)
         {
             if(msg != null)
-                System.out.println(msg);
+                System.out.print(msg);
             
             String input = scan.nextLine().trim();
             
-            if(!input.isEmpty())
+            if(!input.isEmpty() || canBeEmpty)
                 return input;
             
             if(ignoreCase) {
@@ -132,6 +132,30 @@ public abstract class ScannerUtil
             
             System.out.println("Opção inválida.");
         }
+    }
+    
+    public static String scanStringOrDefault(String msg, String defaultValue)
+    {
+        if(msg != null)
+            System.out.print(msg);
+
+        String input = scan.nextLine().trim();
+
+        return input.isEmpty()
+            ? defaultValue
+            : input;
+    }
+    
+    public static boolean scanConfirmation(String msg)
+    {
+        return scanConfirmation(msg, "S", "N", true, true);
+    }
+    
+    public static boolean scanConfirmation(String msg, String yesStr, String noStr, boolean canBeEmpty, boolean ignoreCase)
+    {
+        return scanString(
+            msg, canBeEmpty, ignoreCase, yesStr, noStr
+        ).equalsIgnoreCase(yesStr);
     }
     
     public static final Date scanDate(String msg) {
@@ -158,6 +182,36 @@ public abstract class ScannerUtil
             
             if(canBeEmpty && input.isEmpty())
                 return null;
+            
+            SimpleDateFormat formato = dateFormat == null
+                ? ScannerUtil.sdf
+                : new SimpleDateFormat(dateFormat);
+            
+            try {
+                return formato.parse(input);
+            }
+            catch(ParseException ex) {
+                System.out.println("Data com formato inválido.");
+            }
+        }
+    }
+    
+    public static Date scanDateOrDefault(String msg, Date defaultValue)
+    {
+        return scanDateOrDefault(msg, defaultValue, null);
+    }
+    
+    public static Date scanDateOrDefault(String msg, Date defaultValue, String dateFormat)
+    {
+        while(true)
+        {
+            if(msg != null)
+                System.out.print(msg);
+            
+            String input = scan.nextLine().trim();
+            
+            if(input.isEmpty())
+                return defaultValue;
             
             SimpleDateFormat formato = dateFormat == null
                 ? ScannerUtil.sdf

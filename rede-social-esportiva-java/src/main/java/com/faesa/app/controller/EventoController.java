@@ -1,20 +1,23 @@
 package com.faesa.app.controller;
 
+import com.faesa.app.dao.EventoDAO;
 import com.faesa.app.dao.EventoDAOOracle;
 import com.faesa.app.model.Evento;
 import java.util.List;
 
 public class EventoController
 {
+    private static final EventoDAO eventoDao = new EventoDAOOracle();
+    
     public static int getTotalRegistros()
     {
-        return new EventoDAOOracle().getTotalRegistros();
+        return eventoDao.getTotalRegistros();
     }
     
-    public static Evento selectById(int id)
+    public static Evento findById(int id)
     {
         try {
-            return new EventoDAOOracle().selectById(id);
+            return eventoDao.selectById(id);
         }
         catch(Exception e) {
             System.out.println("Erro ao tentar buscar evento por ID: " + e.getMessage());
@@ -22,10 +25,10 @@ public class EventoController
         }
     }
     
-    public static List<Evento> findAll()
+    public static List<Evento> listAll()
     {
         try {
-            return new EventoDAOOracle().selectAll();
+            return eventoDao.selectAll();
         }
         catch(Exception e) {
             System.out.println("Erro ao tentar buscar eventos." + e.getMessage());
@@ -43,8 +46,8 @@ public class EventoController
     {
         try {
             return evento.getId() == null
-                ? new EventoDAOOracle().insert(evento)
-                : new EventoDAOOracle().update(evento);
+                ? eventoDao.insert(evento)
+                : eventoDao.update(evento);
         }
         catch(Exception e) {
             System.out.println("Erro ao tentar salvar o evento: " + e.getMessage());
@@ -55,7 +58,7 @@ public class EventoController
     public static boolean delete(int id)
     {
         try {
-            return new EventoDAOOracle().delete(id);
+            return eventoDao.delete(id);
         }
         catch(Exception e) {
             System.out.println("Erro ao tentar remover o evento: " + e.getMessage());

@@ -5,6 +5,8 @@ import java.util.List;
 
 public interface EventoDAO
 {
+    int getTotalRegistros();
+    
     Evento selectById(int id) throws Exception;
     
     List<Evento> selectAll() throws Exception;
