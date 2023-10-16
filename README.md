@@ -21,7 +21,10 @@ Este representa uma rede social esportiva. Consiste uma aplicação Java que rea
 ## Como rodar o projeto
 1. Clone este repositório em seu computador.
 
-   - Com o GIT instalado em sua máquina, rode o comando `git clone https://github.com/bruno-remeikis/rede-social-esportiva.git` em um terminal apontando para o local que desejar de sua máquina.
+   - Com o GIT instalado em sua máquina, rode o comando seguinte comando em um terminal apontando para o local que desejar de sua máquina:
+   ```cmd
+   git clone https://github.com/bruno-remeikis/rede-social-esportiva.git
+   ```
 
 2. Tenha um banco de dados Oracle criado. Rode o script [sql/sql_bancodedados.sql](sql) em seu banco.
 
@@ -32,9 +35,9 @@ Este representa uma rede social esportiva. Consiste uma aplicação Java que rea
    mvn exec:java
    ```
    
-   - <b>Opção 2:</b> Abra o [projeto java](rede-social-esportiva-java) em sua IDE (de preferência no NetBeans 19 ou versões próximas)
+   - <b>Opção 2:</b> Abra o [projeto java](rede-social-esportiva-java) em uma IDE (de preferência no NetBeans 19 ou versões próximas), construa e execute o projeto.
 
-   - <b>Opção 3:</b> Abra uma IDE de sua preferência e crie um novo projeto Java com Maven. Feito isso, copie o(s) diretórios(s) que contém os códigos-fonte para dentro de seu novo projeto. Lembre-se de de configurar o arquivo `pom.xml` do seu novo projeto da mesma forma que o [pom.xml](rede-social-esportiva-java/pom.xml) deste projeto está configurado.
+   - <b>Opção 3:</b> Em uma IDE de sua preferência, crie um novo projeto Java com Maven. Feito isso, copie o(s) diretórios(s) que contém os códigos-fonte para dentro de seu novo projeto. Lembre-se de de configurar o arquivo `pom.xml` do seu novo projeto da mesma forma que o [pom.xml](rede-social-esportiva-java/pom.xml) deste projeto está configurado.
 
 <a id="ancora-config-conexao-bd"></a>
 
