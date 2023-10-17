@@ -23,7 +23,7 @@ public class AppEvento extends App
         TableBuilder tb = new TableBuilder(
             "Eventos",
             new Column("ID", 2, null, TextAlign.RIGHT),
-            new Column("Evento", 15)
+            new Column("Evento", 20)
         );
         
         if(eventos == null || eventos.isEmpty())
@@ -188,7 +188,7 @@ public class AppEvento extends App
             "> Local (" + e.getLocal() + ")\n: ", e.getLocal()
         ));
         e.setDescricao(ScannerUtil.scanStringOrDefault(
-            "> Descrição (" + e.getDescricao()+ ")\n: ", e.getDescricao()
+            "> Descrição (" + e.getDescricao() + ")\n: ", e.getDescricao()
         ));
 
         if(EventoController.save(e))

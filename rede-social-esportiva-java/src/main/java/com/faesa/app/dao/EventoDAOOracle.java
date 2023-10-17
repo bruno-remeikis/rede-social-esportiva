@@ -64,7 +64,7 @@ public class EventoDAOOracle extends DAO implements EventoDAO
             "FROM EVENTO " +
             "INNER JOIN ESPORTE ON " +
             "   ESPORTE.ID = EVENTO.ID_ESPORTE " +
-            "WHERE ID = ?";
+            "WHERE EVENTO.ID = ?";
         
         try(
             Connection con = OracleConnector.getConnection();

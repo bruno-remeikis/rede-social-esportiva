@@ -32,6 +32,9 @@ Este representa uma rede social esportiva. Consiste uma aplicação Java que rea
 
    - <b>Opção 1:</b> Com o Maven instalado e configurado em sua máquina, abra o terminal na [raiz do projeto java](rede-social-esportiva-java) e execute os comandos:
    ```cmd
+   mvn clean package
+   ```
+   ```cmd
    mvn exec:java
    ```
    
@@ -66,6 +69,8 @@ Os principais diretórios do repositório estão dispostos da seguinte forma:
 - [diagrams](diagrams): Contém os diagramas Relacional (lógico) e de Entidade e Relacionamento do sistema.
 
 - [sql](sql): Contém os scripts para criação das tabelas e inserção de dados fictícios para testes do sistema.
+
+- [videos](videos): Contém o(s) vídeo(s) de demonstração da aplicação.
 
    - Certifique-se de que o usuário do banco possui todos os privilégios antes de executar os scripts de criação. Caso ocorra erro, execute o comando `GRANT ALL PRIVILEGES TO <NOME_DO_BANCO>;` com o superusuário em seu ambiende de banco de dados, substituindo o trecho `<NOME_DO_BANCO>` pelo nome do seu banco (provavelmente `XE`).
 

@@ -236,7 +236,7 @@ public abstract class App
                     .addCell(e.getEsporte().getNome())
                     .addCell(ScannerUtil.formatDate(e.getData()))
                     .addCell(e.getLocal())
-                    .addCell(e.getDescricao())
+                    .addCell(e.getDescricao() != null ? e.getDescricao() : "")
                     .endLine();
 
         tb.printTable();
