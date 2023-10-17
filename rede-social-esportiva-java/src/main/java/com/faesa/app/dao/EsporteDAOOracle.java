@@ -111,12 +111,27 @@ public class EsporteDAOOracle extends DAO implements EsporteDAO
     @Override
     public List<EventosEsporteDTO> selectQtdEventosEsporte() throws Exception
     {
-        String query =
+        /*String query =
             "SELECT " +
             "    ESPORTE.ID AS ID_ESPORTE " +
             "   ,ESPORTE.NOME AS NOME_ESPORTE " +
             "   ,(SELECT COUNT(*) FROM EVENTO WHERE EVENTO.ID_ESPORTE = ESPORTE.ID) AS QTD_EVENTOS " +
-            "FROM ESPORTE";
+            "FROM ESPORTE";*/
+        
+        String query =
+            "SELECT " +
+            "    ESPORTE.ID AS ID_ESPORTE " +
+            "   ,ESPORTE.NOME AS NOME_ESPORTE " +
+            "   ,COUNT(EVENTO.ID) AS QTD_EVENTOS  " +
+            "FROM ESPORTE " +
+            "LEFT JOIN EVENTO ON " +
+            "   EVENTO.ID_ESPORTE = ESPORTE.ID " +
+            "GROUP BY " +
+            "   ESPORTE.ID, " +
+            "   ESPORTE.NOME " +
+            "ORDER BY " +
+            "   ESPORTE.NOME, " +
+            "   ESPORTE.ID ";
         
         try(
             Connection con = OracleConnector.getConnection();
@@ -143,7 +158,7 @@ public class EsporteDAOOracle extends DAO implements EsporteDAO
     {
         String query =
             "INSERT INTO ESPORTE(ID, NOME) " +
-            "VALUES(ID_EVENTO_SEQ.NEXTVAL, ?)";
+            "VALUES(ID_ESPORTE_SEQ.NEXTVAL, ?)";
         
         try(
             Connection con = OracleConnector.getConnection();

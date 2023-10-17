@@ -21,7 +21,7 @@ Este representa uma rede social esportiva. Consiste uma aplicação Java que rea
 ## Como rodar o projeto
 1. Clone este repositório em seu computador.
 
-   - Com o GIT instalado em sua máquina, rode o comando seguinte comando em um terminal apontando para o local que desejar de sua máquina:
+   - Com o GIT instalado em sua máquina, rode o seguinte comando em um terminal apontando para o local que desejar de sua máquina:
    ```cmd
    git clone https://github.com/bruno-remeikis/rede-social-esportiva.git
    ```
